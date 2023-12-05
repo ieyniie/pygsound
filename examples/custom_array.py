@@ -14,7 +14,7 @@ r = 0.6
 sound_a = np.array([0.5,0.6,0.6,0.7,0.75,0.8,0.9,0.9])
 s = 0.1
 # mesh1 = ps.loadobj("cube.obj",r,s)
-mesh2 = ps.createbox(40, 50, 10, sound_a, s)
+
 def compute_array(mesh, src_coord, lis_coord, micarray,num):
     ctx = ps.Context()
     ctx.diffuse_count = 20000
@@ -47,13 +47,17 @@ def compute_array(mesh, src_coord, lis_coord, micarray,num):
     return res
 
 def main(num):
+    L = random.randint(5,50)
+    W = random.randint(3,40)
+    H = random.randint(3,10)
+    mesh2 = ps.createbox(L, W, H, sound_a, s)
     phi1 = random.randint(0,210)
-    deta_phi = random.randint(-60,60)
+    deta_phi = random.randint(5,85)
     phi2 = int(phi1 + deta_phi)
-    mic_centerx = random.randint(3,20)
-    mic_centery = random.randint(3,20)
-    distance1 = round(random.uniform(0.05,1.40),2)
-    distance2 = round(random.uniform(0.05,1.40),2)
+    mic_centerx = round(random.uniform(1.5,L-1.5),2)
+    mic_centery = round(random.uniform(1.5,W-1.5),2)
+    distance1 = round(random.uniform(0.05,1.50),2)
+    distance2 = round(random.uniform(0.05,1.50),2)
     x_s1 = mic_centerx+distance1*np.cos(np.deg2rad(phi1))
     y_s1 = mic_centery+distance1*np.sin(np.deg2rad(phi1))
     x_s2 = mic_centerx+distance2*np.cos(np.deg2rad(phi2))
@@ -75,7 +79,7 @@ def main(num):
 if __name__ == '__main__':
     mp.set_start_method('spawn')
 
-    cpu_num = 16
+    cpu_num = 32
     train_idx = list(range(0,30000))
     # main(0)
     with Pool(cpu_num) as p:
